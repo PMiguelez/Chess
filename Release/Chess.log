@@ -1,0 +1,15 @@
+﻿  Chess.cpp
+C:\000programacao\Chess\Chess\Board.h(90,24): warning C4018: '>': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Board.h(96,22): warning C4018: '<': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Moves.h(262,22): warning C4018: '<': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Moves.h(263,23): warning C4018: '<': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Moves.h(280,22): warning C4018: '<': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Game.h(38,23): warning C4018: '<': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Game.h(49,23): warning C4018: '<': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Game.h(50,24): warning C4018: '<': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Chess.cpp(12,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 501 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Chess.vcxproj -> C:\000programacao\Chess\Chess\Release\Chess.exe

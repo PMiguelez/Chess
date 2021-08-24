@@ -1,0 +1,11 @@
+﻿  Chess.cpp
+C:\000programacao\Chess\Chess\Board.h(82,24): warning C4018: '>': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Board.h(89,22): warning C4018: '<': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Moves.h(226,22): warning C4018: '<': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Moves.h(227,23): warning C4018: '<': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Moves.h(242,22): warning C4018: '<': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Game.h(32,23): warning C4018: '<': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Game.h(40,23): warning C4018: '<': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Game.h(41,24): warning C4018: '<': signed/unsigned mismatch
+C:\000programacao\Chess\Chess\Chess.cpp(10,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Chess.vcxproj -> C:\000programacao\Chess\Chess\Debug\Chess.exe
