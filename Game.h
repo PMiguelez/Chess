@@ -9,19 +9,25 @@ class Game {
 	Moves moves;
 
 	public:
-	void make_move(Move move) {
-		// removing piece from its past position
-		pair<int, int> from_coord = (*move.piece).pos;
-		board.board[from_coord.first][from_coord.second].removePiece();
+		void make_move(Move move) {
+			(*move.piece).hasMoved = true;
 
-		// adding piece to new position
-		(*move.square).addPiece(move.piece);
-		(*move.piece).pos = (*move.square).coord;
+			if (move.isCastle) {
+				make_move(Move(move.secondPiece, move.secondSquare));
+			}
 
-		// updating string of the board
-		pair<int, int> to_coord = (*move.square).coord;
-		board.strBoard[to_coord.first][to_coord.second] = { (*move.piece).str, (*move.piece).color };
-		board.strBoard[from_coord.first][from_coord.second] = { ' ', ' ' };
+			// removing piece from its past position
+			pair<int, int> from_coord = (*move.piece).pos;
+			board.board[from_coord.first][from_coord.second].removePiece();
+
+			// adding piece to new position
+			(*move.square).addPiece(move.piece);
+			(*move.piece).pos = (*move.square).coord;
+
+			// updating string of the board
+			pair<int, int> to_coord = (*move.square).coord;
+			board.strBoard[to_coord.first][to_coord.second] = { (*move.piece).str, (*move.piece).color };
+			board.strBoard[from_coord.first][from_coord.second] = { ' ', ' ' };
 
 	}
 

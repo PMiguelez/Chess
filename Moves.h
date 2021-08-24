@@ -9,9 +9,19 @@ class Move {
 		Piece *piece;
 		Square *square;
 
-		Move(Piece *this_piece, Square *this_square) {
+		// special case: castle
+		bool isCastle;
+		Piece* secondPiece;
+		Square* secondSquare;
+
+		Move(Piece *this_piece, Square *this_square, bool this_isCastle = false, Piece* this_secondPiece = new Piece(), Square* this_secondSquare = new Square()) {
 			piece = this_piece;
 			square = this_square;
+
+			secondPiece = this_secondPiece;
+			secondSquare = this_secondSquare;
+
+			isCastle = this_isCastle;
 		}
 };
 
@@ -219,6 +229,34 @@ class getMoves {
 				}
 			}
 
+			// castling left
+			if ((*piece).hasMoved == false && (*board)[y][0].getPiece().hasMoved == false){
+				bool canCastle = true;
+				for (int thisX = 1; thisX < x; thisX++) {
+					if (!(*board)[y][thisX].getPiece().empty) {
+						canCastle = false;
+					}
+				}
+
+				if (canCastle) {
+					moves.push_back(Move(piece, &(*board)[y][x-2], true, (*board)[y][0].piece, &(*board)[y][x-1]));
+				}
+			}
+
+			// castling right
+			if ((*piece).hasMoved == false && (*board)[y][7].getPiece().hasMoved == false) {
+				bool canCastle = true;
+				for (int thisX = 6; thisX > x; thisX--) {
+					if (!(*board)[y][thisX].getPiece().empty) {
+						canCastle = false;
+					}
+				}
+
+				if (canCastle) {
+					moves.push_back(Move(piece, &(*board)[y][x + 2], true, (*board)[y][7].piece, &(*board)[y][x+1]));
+				}
+			}
+
 			return moves;
 		}
 
@@ -271,7 +309,7 @@ class Moves {
 
 		for (int i = 0; i < (*this_moves).size(); i++) {
 			for (int k = 0; k < (*this_moves)[i].size(); k++) {
-				allMoves.push_back((*this_moves)[i][k]);
+					allMoves.push_back((*this_moves)[i][k]);
 			}
 		}
 

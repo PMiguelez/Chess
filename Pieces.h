@@ -8,6 +8,7 @@ class Piece {
 		int value = 0;
 	public:
 		bool empty = false;
+		bool hasMoved = false;
 		int index = -1;
 		int colorIndex = -1;
 		char color = ' ';
@@ -29,6 +30,7 @@ class Piece {
 
 		Piece() {
 			empty = true;
+			hasMoved = true;
 		}
 };
 
@@ -81,8 +83,8 @@ class Queen : public Piece {
 
 class King : public Piece {
 	public:
-	King(pair<int, int> getPos, char this_color) : Piece(getPos, this_color) {
-		value = 100000;
-		str = 'K';
-	}
+		King(pair<int, int> getPos, char this_color) : Piece(getPos, this_color) {
+			value = 100000;
+			str = 'K';
+		}
 };
