@@ -81,8 +81,8 @@ class Queen : public Piece {
 
 class King : public Piece {
 	public:
-		King(pair<int, int> getPos, char this_color) : Piece(getPos, this_color) {
-			value = 100000;
-			str = 'K';
-		};
+	King(pair<int, int> getPos, char this_color) : Piece(getPos, this_color) {
+		value = 100000;
+		str = 'K';
+	}
 };
