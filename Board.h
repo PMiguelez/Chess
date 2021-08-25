@@ -42,6 +42,11 @@ class Board {
 	vector<Piece> blackPieces;
 	vector<Piece> pieces;
 
+	// forever deletes a piece
+	void deletePiece(int index) {
+		pieces[index] = Piece();
+	}
+
 	// initializer -> configuring board from texts
 	Board(vector<vector<pair<char, char>>> board_config) {
 		strBoard = board_config;

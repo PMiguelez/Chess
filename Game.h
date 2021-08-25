@@ -2,7 +2,6 @@
 
 #include "Moves.h"
 
-
 // game flow controller --> connects most classes
 class Game {
 	Board board;
@@ -17,12 +16,17 @@ class Game {
 			}
 
 			if (move.isEnPassant) {
-				(*move.secondSquare).removePiece();
+				board.deletePiece((*move.secondSquare).getPiece().index);
 			}
 
 			// removing piece from its past position
 			pair<int, int> from_coord = (*move.piece).pos;
 			board.board[from_coord.first][from_coord.second].removePiece();
+
+			// deleting captured piece
+			if (!(*move.square).getPiece().empty) {
+				board.deletePiece((*move.square).getPiece().index);
+			}
 
 			// adding piece to new position
 			(*move.square).addPiece(move.piece);
@@ -54,11 +58,21 @@ class Game {
 
 			// finds all moves for each piece
 			for (int i = 0; i < board.pieces.size(); i++) {
-				moves.updatePiece(i, &board.board, lastMove);
+				if (!board.pieces[i].empty) {
+					moves.updatePiece(i, &board.board, lastMove);
+				}
+			}
+
+			// find all moves
+			vector<Move> allMoves = moves.get_moves(turn);
+
+			// check if player is out of moves
+			if (allMoves.empty()) {
+				cout << "\n\n DRAW BY STALEMATE";
+				break;
 			}
 
 			// select one random move - make it
-			vector<Move> allMoves = moves.get_moves(turn);
 			Move move = allMoves[int(rand() % (allMoves.size()))];
 
 			make_move(move);
