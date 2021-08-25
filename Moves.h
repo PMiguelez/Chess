@@ -9,19 +9,22 @@ class Move {
 		Piece *piece;
 		Square *square;
 
-		// special case: castle
-		bool isCastle;
+		pair<int, int> from;
+		pair<int, int> to;
+
+		// special cases
 		Piece* secondPiece;
 		Square* secondSquare;
 
-		Move(Piece *this_piece, Square *this_square, bool this_isCastle = false, Piece* this_secondPiece = new Piece(), Square* this_secondSquare = new Square()) {
+		bool isCastle = false;
+		bool isEnPassant = false;
+
+		Move(Piece* this_piece, Square* this_square) {
 			piece = this_piece;
 			square = this_square;
 
-			secondPiece = this_secondPiece;
-			secondSquare = this_secondSquare;
-
-			isCastle = this_isCastle;
+			from = (*this_piece).pos;
+			to = (*this_square).coord;
 		}
 };
 
@@ -37,7 +40,7 @@ class getMoves {
 
 		// EACH PIECE'S ALGORITHM FOR FINDING ITS MOVES:
 
-		vector<Move> pawn(Piece *piece, vector<vector<Square>> *board) {
+		vector<Move> pawn(Piece *piece, vector<vector<Square>> *board, Move lastMove) {
 			vector<Move> moves = {};
 
 			int y = (*piece).pos.first;
@@ -72,6 +75,24 @@ class getMoves {
 			}
 			if (inBound(thisY, x + 1) && ! (*board)[thisY][x + 1].getPiece().empty && (*piece).getColor() != (*board)[thisY][x + 1].getPiece().getColor()) {
 				moves.push_back(Move(piece, &(*board)[thisY][x + 1]));
+			}
+
+			// special case: en passant
+			if ((*lastMove.square).getPiece().str == 'P' && abs(lastMove.from.first - lastMove.to.first) == 2) {
+				if (lastMove.to == pair<int, int>(y, x - 1)) {
+					Move thisMove(piece, &(*board)[thisY][x - 1]);
+					thisMove.secondSquare = &(*board)[y][x - 1];
+					thisMove.isEnPassant = true;
+
+					moves.push_back(thisMove);
+				}
+				else if (lastMove.to == pair<int, int>(y, x + 1)) {
+					Move thisMove(piece, &(*board)[thisY][x + 1]);
+					thisMove.secondSquare = &(*board)[y][x + 1];
+					thisMove.isEnPassant = true;
+
+					moves.push_back(thisMove);
+				}
 			}
 
 			return moves;
@@ -239,7 +260,12 @@ class getMoves {
 				}
 
 				if (canCastle) {
-					moves.push_back(Move(piece, &(*board)[y][x-2], true, (*board)[y][0].piece, &(*board)[y][x-1]));
+					Move thisMove(piece, &(*board)[y][x - 2]);
+					thisMove.secondPiece = (*board)[y][0].piece;
+					thisMove.secondSquare = &(*board)[y][x - 1];
+					thisMove.isCastle = true;
+
+					moves.push_back(thisMove);
 				}
 			}
 
@@ -253,7 +279,12 @@ class getMoves {
 				}
 
 				if (canCastle) {
-					moves.push_back(Move(piece, &(*board)[y][x + 2], true, (*board)[y][7].piece, &(*board)[y][x+1]));
+					Move thisMove(piece, &(*board)[y][x + 2]);
+					thisMove.secondPiece = (*board)[y][7].piece;
+					thisMove.secondSquare = &(*board)[y][x + 1];
+					thisMove.isCastle = true;
+
+					moves.push_back(thisMove);
 				}
 			}
 
@@ -261,10 +292,10 @@ class getMoves {
 		}
 
 		// initializer -> determine which function to be called and calls it
-		getMoves(Piece *piece, vector<vector<Square>> *board) {
+		getMoves(Piece *piece, vector<vector<Square>> *board, Move lastMove) {
 			switch ((*piece).str) {
 				case 'P':
-					finalMoves = pawn(piece, board);
+					finalMoves = pawn(piece, board, lastMove);
 					break;
 				case 'N':
 					finalMoves = knight(piece, board);
@@ -317,10 +348,10 @@ class Moves {
 	}
 
 	// finds and stores a piece's moves (given a board)
-	void updatePiece(int index, vector<vector<Square>>* board) {
+	void updatePiece(int index, vector<vector<Square>>* board, Move lastMove) {
 
 		// finding moves | updating main array
-		moves[index] = getMoves(&(*pieces)[index], board).finalMoves;
+		moves[index] = getMoves(&(*pieces)[index], board, lastMove).finalMoves;
 
 		// updating color array
 		int colorIndex = (*pieces)[index].colorIndex;

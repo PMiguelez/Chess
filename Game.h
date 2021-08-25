@@ -16,6 +16,10 @@ class Game {
 				make_move(Move(move.secondPiece, move.secondSquare));
 			}
 
+			if (move.isEnPassant) {
+				(*move.secondSquare).removePiece();
+			}
+
 			// removing piece from its past position
 			pair<int, int> from_coord = (*move.piece).pos;
 			board.board[from_coord.first][from_coord.second].removePiece();
@@ -38,7 +42,9 @@ class Game {
 		board = Board(board_config);
 		moves = Moves(&board.pieces);
 
-		char turn = 'B';
+		Move lastMove(new Piece(), new Square());
+
+		char turn = 'W';
 		int turnCount = 1;
 
 		// game loop
@@ -48,7 +54,7 @@ class Game {
 
 			// finds all moves for each piece
 			for (int i = 0; i < board.pieces.size(); i++) {
-				moves.updatePiece(i, &board.board);
+				moves.updatePiece(i, &board.board, lastMove);
 			}
 
 			// select one random move - make it
@@ -56,6 +62,8 @@ class Game {
 			Move move = allMoves[int(rand() % (allMoves.size()))];
 
 			make_move(move);
+
+			lastMove = move;
 
 			// changes turn
 			if (turn == 'W') {
