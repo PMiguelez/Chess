@@ -8,6 +8,11 @@ class Game {
 	Moves moves;
 
 	public:
+		void deletePiece(int index) {
+			moves.deleteMoves(index);
+			board.deletePiece(index);
+		}
+
 		void make_move(Move move) {
 			(*move.piece).hasMoved = true;
 
@@ -16,7 +21,7 @@ class Game {
 			}
 
 			if (move.isEnPassant) {
-				board.deletePiece((*move.secondSquare).getPiece().index);
+				deletePiece((*move.secondSquare).getPiece().index);
 			}
 
 			// removing piece from its past position
@@ -25,7 +30,7 @@ class Game {
 
 			// deleting captured piece
 			if (!(*move.square).getPiece().empty) {
-				board.deletePiece((*move.square).getPiece().index);
+				deletePiece((*move.square).getPiece().index);
 			}
 
 			// adding piece to new position

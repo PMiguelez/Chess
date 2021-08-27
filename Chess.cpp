@@ -33,5 +33,5 @@ int main()
 								{{' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}} };
 
 	// starting game
-	Game game(test2);
+	Game game(test);
 }

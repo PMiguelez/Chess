@@ -365,6 +365,20 @@ class Moves {
 
 	}
 
+	void deleteMoves(int index) {
+		moves[index] = {};
+
+		// updating color array
+		int colorIndex = (*pieces)[index].colorIndex;
+
+		if ((*pieces)[index].color == 'W') {
+			whiteMoves[colorIndex] = {};
+		}
+		else {
+			blackMoves[colorIndex] = {};
+		}
+	}
+
 	// initializer -> get pieces
 	Moves(vector<Piece>* this_pieces) {
 		pieces = this_pieces;
