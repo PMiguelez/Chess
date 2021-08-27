@@ -24,6 +24,15 @@ class Game {
 				deletePiece((*move.secondSquare).getPiece().index);
 			}
 
+			if (move.isPromotion) {
+				Piece beforePromotion = (*move.piece);
+				(*move.piece) = move.promotedPiece;
+
+				(*move.piece).index = beforePromotion.index;
+				(*move.piece).colorIndex = beforePromotion.colorIndex;
+				(*move.piece).hasMoved = true;
+			}
+
 			// removing piece from its past position
 			pair<int, int> from_coord = (*move.piece).pos;
 			board.board[from_coord.first][from_coord.second].removePiece();

@@ -16,8 +16,11 @@ class Move {
 		Piece* secondPiece;
 		Square* secondSquare;
 
+		Piece promotedPiece;
+
 		bool isCastle = false;
 		bool isEnPassant = false;
+		bool isPromotion = false;
 
 		Move(Piece* this_piece, Square* this_square) {
 			piece = this_piece;
@@ -36,6 +39,23 @@ class getMoves {
 		// is a position in the board? -> useful
 		bool inBound(int y, int x) {
 			return (y >= 0 && y <= 7 && x >= 0 && x <= 7);
+		}
+
+		// special case: pawn promotion
+		void find_promotions(Move move, vector<Move> *moves){
+			move.isPromotion = true;
+
+			move.promotedPiece = Knight(move.from, (*move.piece).color);
+			(*moves).push_back(move);
+
+			move.promotedPiece = Bishop(move.from, (*move.piece).color);
+			(*moves).push_back(move);
+
+			move.promotedPiece = Rook(move.from, (*move.piece).color);
+			(*moves).push_back(move);
+
+			move.promotedPiece = Queen(move.from, (*move.piece).color);
+			(*moves).push_back(move);
 		}
 
 		// EACH PIECE'S ALGORITHM FOR FINDING ITS MOVES:
@@ -65,16 +85,32 @@ class getMoves {
 			}
 
 			// does the square exist? + is it free from pieces?
+				// is it a promotion?
 				// adds a move to the list
 
 			if (inBound(thisY, x) && (*board)[thisY][x].getPiece().empty) {
-				moves.push_back(Move(piece, &(*board)[thisY][x]));
+				if (thisY == 7 || thisY == 0) {
+					find_promotions(Move(piece, &(*board)[thisY][x]), &moves);
+				}
+				else {
+					moves.push_back(Move(piece, &(*board)[thisY][x]));
+				}
 			}
 			if (inBound(thisY, x - 1) && ! (*board)[thisY][x - 1].getPiece().empty && (*piece).getColor() != (*board)[thisY][x - 1].getPiece().getColor()) {
-				moves.push_back(Move(piece, &(*board)[thisY][x - 1]));
+				if (thisY == 7 || thisY == 0) {
+					find_promotions(Move(piece, &(*board)[thisY][x - 1]), &moves);
+				}
+				else {
+					moves.push_back(Move(piece, &(*board)[thisY][x - 1]));
+				}
 			}
 			if (inBound(thisY, x + 1) && ! (*board)[thisY][x + 1].getPiece().empty && (*piece).getColor() != (*board)[thisY][x + 1].getPiece().getColor()) {
-				moves.push_back(Move(piece, &(*board)[thisY][x + 1]));
+				if (thisY == 7 || thisY == 0) {
+					find_promotions(Move(piece, &(*board)[thisY][x + 1]), &moves);
+				}
+				else {
+					moves.push_back(Move(piece, &(*board)[thisY][x + 1]));
+				}
 			}
 
 			// special case: en passant
