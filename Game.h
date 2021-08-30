@@ -70,6 +70,9 @@ class Game {
 
 			cin.ignore();
 
+			// reset pressure
+			board.resetPressure();
+
 			// finds all moves for each piece
 			for (int i = 0; i < board.pieces.size(); i++) {
 				if (!board.pieces[i].empty) {
@@ -77,18 +80,17 @@ class Game {
 				}
 			}
 
-			// find all moves
+			// get all moves
 			vector<Move> allMoves = moves.get_moves(turn);
 
-			// check if player is out of moves
+			// is out of moves? -> end
 			if (allMoves.empty()) {
-				cout << "\n\n DRAW BY STALEMATE";
+				cout << "\n\n DRAW BY STALEMATE " << turnCount;
 				break;
 			}
 
 			// select one random move - make it
 			Move move = allMoves[int(rand() % (allMoves.size()))];
-
 			make_move(move);
 
 			lastMove = move;
@@ -104,7 +106,7 @@ class Game {
 			// prints board to console
 			cout << "Turn #" << turnCount << "\n";
 			turnCount++;
-
+			
 			for (int y = 0; y < board.strBoard.size(); y++) {
 				for (int x = 0; x < board.strBoard[y].size(); x++) {
 					if (!(*board.board[y][x].piece).empty) {

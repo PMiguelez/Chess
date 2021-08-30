@@ -84,9 +84,10 @@ class getMoves {
 				}
 			}
 
-			// does the square exist? + is it free from pieces?
-				// is it a promotion?
-				// adds a move to the list
+			// square in range? + square free from pieces?
+				// is move a promotion?
+				// adds move
+				// marks pressure (if needed)
 
 			if (inBound(thisY, x) && (*board)[thisY][x].getPiece().empty) {
 				if (thisY == 7 || thisY == 0) {
@@ -96,20 +97,30 @@ class getMoves {
 					moves.push_back(Move(piece, &(*board)[thisY][x]));
 				}
 			}
-			if (inBound(thisY, x - 1) && ! (*board)[thisY][x - 1].getPiece().empty && (*piece).getColor() != (*board)[thisY][x - 1].getPiece().getColor()) {
-				if (thisY == 7 || thisY == 0) {
-					find_promotions(Move(piece, &(*board)[thisY][x - 1]), &moves);
-				}
-				else {
-					moves.push_back(Move(piece, &(*board)[thisY][x - 1]));
+
+			if (inBound(thisY, x - 1)) {
+				(*board)[thisY][x - 1].pressure.push_back(piece);
+
+				if (inBound(thisY, x - 1) && !(*board)[thisY][x - 1].getPiece().empty && (*piece).getColor() != (*board)[thisY][x - 1].getPiece().getColor()) {
+					if (thisY == 7 || thisY == 0) {
+						find_promotions(Move(piece, &(*board)[thisY][x - 1]), &moves);
+					}
+					else {
+						moves.push_back(Move(piece, &(*board)[thisY][x - 1]));
+					}
 				}
 			}
-			if (inBound(thisY, x + 1) && ! (*board)[thisY][x + 1].getPiece().empty && (*piece).getColor() != (*board)[thisY][x + 1].getPiece().getColor()) {
-				if (thisY == 7 || thisY == 0) {
-					find_promotions(Move(piece, &(*board)[thisY][x + 1]), &moves);
-				}
-				else {
-					moves.push_back(Move(piece, &(*board)[thisY][x + 1]));
+
+			if (inBound(thisY, x + 1)) {
+				(*board)[thisY][x + 1].pressure.push_back(piece);
+
+				if (!(*board)[thisY][x + 1].getPiece().empty && (*piece).getColor() != (*board)[thisY][x + 1].getPiece().getColor()) {
+					if (thisY == 7 || thisY == 0) {
+						find_promotions(Move(piece, &(*board)[thisY][x + 1]), &moves);
+					}
+					else {
+						moves.push_back(Move(piece, &(*board)[thisY][x + 1]));
+					}
 				}
 			}
 
@@ -148,12 +159,20 @@ class getMoves {
 				for (int right = -1; right < 2; right += 2) {
 					for (int down = -1; down < 2; down += 2) {
 
-						thisY = y + k * right;
-						thisX = x + (3 - k) * down;
+						thisY = y + k * down;
+						thisX = x + (3 - k) * right;
 
-						// does it exist? + is it free?
-						if (inBound(thisY, thisX) && (*piece).getColor() != (*board)[thisY][thisX].getPiece().getColor()) {
-							// adds a move to the list
+						// out of range -> break
+						if (!inBound(thisY, thisX)) {
+							continue;
+						}
+
+						// marks pressure
+						(*board)[thisY][thisX].pressure.push_back(piece);
+
+						// free from same color pieces?
+						if ((*piece).getColor() != (*board)[thisY][thisX].getPiece().getColor()) {
+							// adds move
 							moves.push_back(Move(piece, &(*board)[thisY][thisX]));
 						}
 					}
@@ -176,6 +195,7 @@ class getMoves {
 			for (int direction1 = -1; direction1 < 2; direction1 += 2) {
 				for (int direction2 = -1; direction2 < 2; direction2 += 2) {
 					int k = 0;
+					bool canMove = true;
 
 					// goes through each square in a direction
 					while (true) {
@@ -183,19 +203,44 @@ class getMoves {
 						thisY = y + k * direction1;
 						thisX = x + k * direction2;
 
-						// does it exist? + is it free from the same color? 
-						if (inBound(thisY, thisX) && (*board)[thisY][thisX].getPiece().getColor() != (*piece).getColor()) {
-							// adds a move to the list
-							moves.push_back(Move(piece, &(*board)[thisY][thisX]));
+						// out of range -> breaks
+						if (!inBound(thisY, thisX)) {
+							break;
+						}
 
-							// is it blocked by a different color? -> changes direction
+						Piece hitPiece = (*board)[thisY][thisX].getPiece();
+
+						// marks pressure
+						(*board)[thisY][thisX].pressure.push_back(piece);
+
+						// free from same color pieces?
+						if (hitPiece.getColor() != (*piece).getColor()) {
+
+							// adds move
+							if (canMove) {
+								moves.push_back(Move(piece, &(*board)[thisY][thisX]));
+							}
+
+							// blocked by different color piece -> breaks
 							if (!(*board)[thisY][thisX].getPiece().empty) {
 								break;
 							}
 						}
-						// changes direction
+
+						// blocked by same color piece
 						else {
-							break;
+							canMove = false;
+
+							// moves in same direction = not blocking pressure -> no break
+							if (hitPiece.str != 'Q' && hitPiece.str != 'B') {
+
+								// special pressure case: pawn blocking bishop
+								if (hitPiece.str == 'P' && max(0, direction1) == ((*piece).getColor() == 'B') && inBound(thisY + k * direction1, thisX + k * direction2)) {
+									(*board)[thisY + k * direction1][thisX + k * direction2].pressure.push_back(piece);
+								}
+
+								break;
+							}
 						}
 					}
 				}
@@ -219,6 +264,7 @@ class getMoves {
 				thisX = x;
 				for (int direction = -1; direction < 2; direction += 2) {
 					int k = 0;
+					bool canMove = true;
 
 					// goes through each square in a direction
 					while (true) {
@@ -230,20 +276,38 @@ class getMoves {
 							thisX = x + k * direction;
 						}
 
-						// does it exist? + is it free from the same color? 
-						if (inBound(thisY, thisX) && (*board)[thisY][thisX].getPiece().getColor() != (*piece).getColor()) {
-							// adds a move to the list
-							moves.push_back(Move(piece, &(*board)[thisY][thisX]));
+						// out of range -> breaks
+						if (!inBound(thisY, thisX)) {
+							break;
+						}
 
-							// is it blocked by a different color ? -> changes direction
+						Piece hitPiece = (*board)[thisY][thisX].getPiece();
+
+						// marks pressure
+						(*board)[thisY][thisX].pressure.push_back(piece);
+
+						// free from same color pieces?
+						if (hitPiece.getColor() != (*piece).getColor()) {
+
+							// adds move
+							if (canMove) {
+								moves.push_back(Move(piece, &(*board)[thisY][thisX]));
+							}
+
+							// blocked by different color piece -> breaks
 							if (!(*board)[thisY][thisX].getPiece().empty) {
 								break;
 							}
 						}
 
-						// changes direction
+						// blocked by same color piece
 						else {
-							break;
+							canMove = false;
+
+							// moves in same direction = not blocking pressure -> no break
+							if (hitPiece.str != 'Q' && hitPiece.str != 'R') {
+								break;
+							}
 						}
 					}
 				}
@@ -278,8 +342,16 @@ class getMoves {
 					thisY = y + y_move;
 					thisX = x + x_move;
 
-					// does it exist? + is it free? 
-					if (inBound(thisY, thisX) && (y_move != 0 || x_move != 0) && (*piece).getColor() != (*board)[thisY][thisX].getPiece().getColor()) {
+					// out of range -> breaks
+					if (!inBound(thisY, thisX) || (y_move == 0 && x_move == 0)) {
+						continue;
+					}
+
+					// marks pressure
+					(*board)[thisY][thisX].pressure.push_back(piece);
+
+					// square free from same color pieces? 
+					if ((*piece).getColor() != (*board)[thisY][thisX].getPiece().getColor()) {
 						// adds a move to the list
 						moves.push_back(Move(piece, &(*board)[thisY][thisX]));
 					}

@@ -9,6 +9,8 @@ class Square {
 	public:
 		pair<int, int> coord;
 
+		vector<Piece*> pressure = {};
+
 		Piece *piece = new Piece();
 
 		void addPiece(Piece *this_piece) {
@@ -42,7 +44,16 @@ class Board {
 	vector<Piece> blackPieces;
 	vector<Piece> pieces;
 
-	// forever deletes a piece
+	// resets list of what pieces hit which squares
+	void resetPressure() {
+		for (int y = 0; y < 8; y++) {
+			for (int x = 0; x < 8; x++){
+				board[y][x].pressure = {};
+			}
+		}
+	}
+
+	// deletes a piece forever
 	void deletePiece(int index) {
 		pieces[index] = Piece();
 	}

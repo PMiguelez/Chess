@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include <time.h>
 #include "Game.h"
 
@@ -32,6 +33,6 @@ int main()
 								{{' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}},
 								{{' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}} };
 
-	// starting game
-	Game game(test2);
+
+	Game game(test);
 }
