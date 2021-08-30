@@ -327,7 +327,7 @@ class getMoves {
 			return moves;
 		}
 
-		vector<Move> king(Piece *piece, vector<vector<Square>> *board) {
+		vector<Move> king(Piece *piece, vector<vector<Square>> *board, pair<bool, bool> castle_white, pair<bool, bool> castle_black) {
 			vector<Move> moves = {};
 
 			int y = (*piece).pos.first;
@@ -358,8 +358,13 @@ class getMoves {
 				}
 			}
 
+			pair<bool, bool> castle = castle_white;
+			if ((*piece).color == 'B') {
+				castle = castle_black;
+			}
+
 			// castling left
-			if ((*piece).hasMoved == false && (*board)[y][0].getPiece().hasMoved == false){
+			if (castle.first && (*board)[y][0].getPiece().hasMoved == false){
 				bool canCastle = true;
 				for (int thisX = 1; thisX < x; thisX++) {
 					if (!(*board)[y][thisX].getPiece().empty) {
@@ -378,7 +383,7 @@ class getMoves {
 			}
 
 			// castling right
-			if ((*piece).hasMoved == false && (*board)[y][7].getPiece().hasMoved == false) {
+			if (castle.second && (*board)[y][7].getPiece().hasMoved == false) {
 				bool canCastle = true;
 				for (int thisX = 6; thisX > x; thisX--) {
 					if (!(*board)[y][thisX].getPiece().empty) {
@@ -400,7 +405,7 @@ class getMoves {
 		}
 
 		// initializer -> determine which function to be called and calls it
-		getMoves(Piece *piece, vector<vector<Square>> *board, Move lastMove) {
+		getMoves(Piece *piece, vector<vector<Square>> *board, pair<bool,bool> castle_white, pair<bool,bool> castle_black, Move lastMove) {
 			switch ((*piece).str) {
 				case 'P':
 					finalMoves = pawn(piece, board, lastMove);
@@ -418,7 +423,7 @@ class getMoves {
 					finalMoves = queen(piece, board);
 					break;
 				case 'K':
-					finalMoves = king(piece, board);
+					finalMoves = king(piece, board, castle_white, castle_black);
 					break;
 			}
 		}
@@ -436,6 +441,9 @@ class Moves {
 	vector<vector<Move>> blackMoves;
 	vector<vector<Move>> moves;
 
+	pair<bool, bool> castle_white = { true, true };
+	pair<bool, bool> castle_black = { true, true };
+	
 	// returns a single array with all moves of a side
 	vector<Move> get_moves(char color) {
 		vector<vector<Move>>* this_moves = &whiteMoves;
@@ -459,7 +467,7 @@ class Moves {
 	void updatePiece(int index, vector<vector<Square>>* board, Move lastMove) {
 
 		// finding moves | updating main array
-		moves[index] = getMoves(&(*pieces)[index], board, lastMove).finalMoves;
+		moves[index] = getMoves(&(*pieces)[index], board, castle_white, castle_black, lastMove).finalMoves;
 
 		// updating color array
 		int colorIndex = (*pieces)[index].colorIndex;

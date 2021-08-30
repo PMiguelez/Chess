@@ -44,6 +44,9 @@ class Board {
 	vector<Piece> blackPieces;
 	vector<Piece> pieces;
 
+	int white_king_index = 0;
+	int black_king_index = 0;
+
 	// resets list of what pieces hit which squares
 	void resetPressure() {
 		for (int y = 0; y < 8; y++) {
@@ -106,10 +109,18 @@ class Board {
 					if (color == 'W') {
 						piece.colorIndex = whitePieces.size();
 						whitePieces.push_back(piece);
+
+						if (piece.str == 'K') {
+							white_king_index = pieces.size();
+						}
 					}
 					else if (color == 'B') {
 						piece.colorIndex = blackPieces.size();
 						blackPieces.push_back(piece);
+
+						if (piece.str == 'K') {
+							black_king_index = pieces.size();
+						}
 					}
 
 					piece.index = pieces.size(); // useful to locate them in arrays
