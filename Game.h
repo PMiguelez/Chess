@@ -136,18 +136,18 @@ class Game {
 			return true;
 		}
 
-		void activate() {
+		Game* activate() {
 			// get all moves
 			vector<Move> allMoves = moves.get_moves(turn);
 			
-			vector<Game> newGames = {};
+			vector<Game*> newGames = {};
 
 			// making a game for each move
 			for (int i = 0; i < allMoves.size(); i++) {
-				newGames.push_back(Game(board.strBoard, turn, turnCount + 1, moves.castle_white, moves.castle_black, allMoves[i]));
+				newGames.push_back(new Game(board.strBoard, turn, turnCount + 1, moves.castle_white, moves.castle_black, allMoves[i]));
 
 				// is illegal?
-				if (!isLegal(newGames[newGames.size() - 1])) {
+				if (!isLegal(*newGames[newGames.size() - 1])) {
 					newGames.pop_back();
 				}
 			}
@@ -165,11 +165,13 @@ class Game {
 				else {
 					cout << "\n\n CHECKMATE " << turn << " WINS";
 				}
-				return;
+				exit(1000);
 			}
 
 			int nextGame = int(rand() % newGames.size());
-			newGames[nextGame].activate();
+			newGames.erase(newGames.begin() , newGames.begin() + nextGame);
+			newGames.erase(newGames.begin() + 1, newGames.end());
+			return newGames[0];
 		}
 
 
