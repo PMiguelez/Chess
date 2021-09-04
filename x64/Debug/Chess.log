@@ -1,1 +1,7 @@
-﻿  Chess.vcxproj -> C:\000programacao\Chess\Chess\x64\Debug\Chess.exe
+﻿  Chess.cpp
+C:\000programacao\Chess\Chess\Chess.cpp(14,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Game.cpp
+  MoveFinder.cpp
+  MoveManager.cpp
+  Generating Code...
+  Chess.vcxproj -> C:\000programacao\Chess\Chess\x64\Debug\Chess.exe

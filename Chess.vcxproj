@@ -140,12 +140,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Board.cpp" />
     <ClCompile Include="Chess.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Move.cpp" />
+    <ClCompile Include="MoveFinder.cpp" />
+    <ClCompile Include="MoveManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Moves.h" />
+    <ClInclude Include="Move.h" />
+    <ClInclude Include="MoveFinder.h" />
+    <ClInclude Include="MoveManager.h" />
     <ClInclude Include="Pieces.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

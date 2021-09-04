@@ -1,5 +1,9 @@
 #pragma once
 
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
 
 // information/operations on pieces
