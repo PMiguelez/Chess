@@ -2,7 +2,9 @@
 
 #include "Moves.h"
 
-// game flow controller --> connects most classes
+using namespace std;
+
+// game flow controller -> connects most classes
 class Game {
 	Board board;
 	Moves moves;
@@ -38,6 +40,8 @@ class Game {
 		}
 
 		void changeTurn() {
+			turnCount++;
+
 			if (turn == 'W') {
 				turn = 'B';
 			}
@@ -67,8 +71,8 @@ class Game {
 				}
 			}
 
+			// castle? king move? -> can no longer castle
 			if (move.isCastle || (*move.piece).str == 'K') {
-				// can no longer castle
 				if ((*move.piece).color == 'W') {
 					moves.castle_white = { false, false };
 				}
@@ -83,13 +87,16 @@ class Game {
 			}
 
 			if (move.isEnPassant) {
+				// remove en-passaned piece
 				deletePiece((*move.secondSquare).getPiece().index);
 			}
 
 			if (move.isPromotion) {
+				// pawn = promoted piece
 				Piece beforePromotion = (*move.piece);
 				(*move.piece) = move.promotedPiece;
 
+				// adjust it's properties
 				(*move.piece).index = beforePromotion.index;
 				(*move.piece).colorIndex = beforePromotion.colorIndex;
 				(*move.piece).hasMoved = true;
@@ -118,6 +125,7 @@ class Game {
 		}
 
 		bool isLegal(Game newGame) {
+			// what king can't move this turn?
 			int kingIndex = newGame.board.white_king_index;
 			if (newGame.turn == 'W') {
 				kingIndex = newGame.board.black_king_index;
@@ -125,10 +133,10 @@ class Game {
 
 			pair<int, int> kingPos = newGame.board.pieces[kingIndex].pos;
 
+			// checking attacks on it
 			vector<Piece*> pressure = newGame.board.board[kingPos.first][kingPos.second].pressure;
 			for (int i = 0; i < pressure.size(); i++) {
 				if ((*pressure[i]).color == newGame.turn) {
-					//newGame.print();
 					return false;
 				}
 			}
@@ -136,6 +144,7 @@ class Game {
 			return true;
 		}
 
+		// game loop | new active position
 		Game* activate() {
 			// get all moves
 			vector<Move> allMoves = moves.get_moves(turn);
@@ -144,9 +153,9 @@ class Game {
 
 			// making a game for each move
 			for (int i = 0; i < allMoves.size(); i++) {
-				newGames.push_back(new Game(board.strBoard, turn, turnCount + 1, moves.castle_white, moves.castle_black, allMoves[i]));
+				newGames.push_back(new Game(this, allMoves[i]));
 
-				// is illegal?
+				// is illegal? -> removes it
 				if (!isLegal(*newGames[newGames.size() - 1])) {
 					newGames.pop_back();
 				}
@@ -156,9 +165,11 @@ class Game {
 			cin.ignore();
 			print();
 
-			// is out of moves? -> end
+			// out of moves? -> end
 			if (newGames.empty()) {
 				changeTurn();
+
+				// king (not) in check? -> Stalemate | Checkmate
 				if (isLegal(*this)) {
 					cout << "\n\n DRAW BY STALEMATE ";
 				}
@@ -168,41 +179,39 @@ class Game {
 				exit(1000);
 			}
 
+			// choose next move
 			int nextGame = int(rand() % newGames.size());
+
+			// clean memory
 			newGames.erase(newGames.begin() , newGames.begin() + nextGame);
 			newGames.erase(newGames.begin() + 1, newGames.end());
+
 			return newGames[0];
 		}
 
-
-		Game(vector<vector<pair<char, char>>> board_config) {
+		// organize game transition
+		void cloneGameState(Game* game) {
 
 			// create the board | get ready to find moves
-			board = Board(board_config);
+			board = Board((*game).board.strBoard);
 			moves = Moves(&board.pieces);
 
-			turn = 'W';
-			turnCount = 1;
+			// can castle?
+			moves.castle_white = (*game).moves.castle_white;
+			moves.castle_black = (*game).moves.castle_black;
 
-			// finds all moves + pressure
-			for (int i = 0; i < board.pieces.size(); i++) {
-				if (!board.pieces[i].empty) {
-					moves.updatePiece(i, &board.board, Move(new Piece(), new Square()));
-				}
-			}
+			// adjust turn
+			turn = (*game).turn;
+			turnCount = (*game).turnCount;
 		}
 
-		Game(vector<vector<pair<char, char>>> board_config, char this_turn, int this_turnCount, pair<bool,bool> this_castle_white, pair<bool,bool> this_castle_black, Move move) {
-			// create the board | get ready to find moves
-			board = Board(board_config);
-			moves = Moves(&board.pieces);
+		// game to game transition
+		Game(Game* parentGame, Move move) {
 
-			moves.castle_white = this_castle_white;
-			moves.castle_black = this_castle_black;
+			// clone vars from past Game
+			cloneGameState(parentGame);
 
-			turn = this_turn;
-			turnCount = this_turnCount;
-
+			// adjust values to this Game
 			move.piece = board.board[move.from.first][move.from.second].piece;
 			move.square = &board.board[move.to.first][move.to.second];
 			if (move.isCastle) {
@@ -215,7 +224,25 @@ class Game {
 
 			make_move(move);
 
-			// updating moves and pressure
+			// update moves + pressure
+			for (int i = 0; i < board.pieces.size(); i++) {
+				if (!board.pieces[i].empty) {
+					moves.updatePiece(i, &board.board, Move(new Piece(), new Square()));
+				}
+			}
+		}
+
+		// initial constructor
+		Game(vector<vector<pair<char, char>>> board_config) {
+
+			// create the board | get ready to find moves
+			board = Board(board_config);
+			moves = Moves(&board.pieces);
+
+			turn = 'W';
+			turnCount = 1;
+
+			// finds all moves + pressure
 			for (int i = 0; i < board.pieces.size(); i++) {
 				if (!board.pieces[i].empty) {
 					moves.updatePiece(i, &board.board, Move(new Piece(), new Square()));

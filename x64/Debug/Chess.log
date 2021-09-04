@@ -1,8 +1,1 @@
-﻿  Chess.cpp
-C:\000programacao\Chess\Chess\Board.h(110,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\000programacao\Chess\Chess\Board.h(114,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\000programacao\Chess\Chess\Board.h(118,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\000programacao\Chess\Chess\Board.h(122,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\000programacao\Chess\Chess\Board.h(126,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\000programacao\Chess\Chess\Chess.cpp(13,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  Chess.vcxproj -> C:\000programacao\Chess\Chess\x64\Debug\Chess.exe
+﻿  Chess.vcxproj -> C:\000programacao\Chess\Chess\x64\Debug\Chess.exe

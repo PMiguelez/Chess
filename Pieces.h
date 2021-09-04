@@ -2,7 +2,7 @@
 
 using namespace std;
 
-// information and operations with pieces
+// information/operations on pieces
 class Piece {
 	protected:
 		int value = 0;

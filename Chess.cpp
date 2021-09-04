@@ -10,6 +10,7 @@ using namespace std;
 
 int main()
 {
+	// reset random seed
 	srand(time(0));
 
 	// initial board
@@ -33,10 +34,10 @@ int main()
 								{{' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}},
 								{{' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {'K','W'}, {' ',' '}, {' ',' '}, {' ',' '}} };
 
-	Game game(test);
-	Game* gamePtr = game.activate();
+
+	Game* game = Game(test).activate();
 
 	while (true) {
-		gamePtr = (*gamePtr).activate();
+		game = (*game).activate();
 	}
 }
