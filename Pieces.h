@@ -8,24 +8,18 @@ using namespace std;
 
 // information/operations on pieces
 class Piece {
-	protected:
-		int value = 0;
 	public:
+		int value = 0;
+		char color = ' ';
+		char str = ' ';
+
+		// secondary values
 		bool empty = false;
 		bool hasMoved = false;
 		int index = -1;
 		int colorIndex = -1;
-		char color = ' ';
-		char str = ' ';
 
 		pair<int, int> pos = {};
-
-		char getColor() {
-			return color;
-		}
-		int getValue() {
-			return value;
-		}
 
 		Piece(pair<int, int> getPos, char this_color) {
 			color = this_color;

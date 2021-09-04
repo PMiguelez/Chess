@@ -1,6 +1,13 @@
-﻿  Chess.cpp
+﻿  Board.cpp
+C:\000programacao\Chess\Chess\Board.cpp(84,43): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\000programacao\Chess\Chess\Board.cpp(88,39): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\000programacao\Chess\Chess\Board.cpp(92,43): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\000programacao\Chess\Chess\Board.cpp(96,39): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\000programacao\Chess\Chess\Board.cpp(100,32): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  Chess.cpp
 C:\000programacao\Chess\Chess\Chess.cpp(14,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   Game.cpp
+  Move.cpp
   MoveFinder.cpp
   MoveManager.cpp
   Generating Code...

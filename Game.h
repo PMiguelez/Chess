@@ -29,9 +29,9 @@ class Game {
 		// game loop | update active position
 		Game* activate();
 
-		// organize game transition
-		void cloneGameState(Game* game);
 
+		// help organize game transition
+		void cloneGameState(Game* game);
 
 		// game to game transition
 		Game(Game* parentGame, Move move);

@@ -23,11 +23,11 @@ class Moves {
 	// finds and stores a piece's moves (given a board)
 	void updatePiece(int index, vector<vector<Square>>* board, Move lastMove);
 
+	// resets a piece's moves
 	void deleteMoves(int index);
 
 	// initializer -> get pieces
 	Moves(vector<Piece>* this_pieces);
 
-	// hability to create empty object
 	Moves();
 };

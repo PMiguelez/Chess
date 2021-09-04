@@ -12,11 +12,10 @@ class Square {
 		vector<Piece*> pressure = {};
 
 		Piece *piece = new Piece();
+		Piece getPiece();
 
 		void addPiece(Piece* this_piece);
 		void removePiece();
-
-		Piece getPiece();
 
 		Square(pair<int, int> coord_);
 		Square();
@@ -50,6 +49,5 @@ class Board {
 		// initializer -> configure board from text
 		Board(vector<vector<pair<char, char>>> board_config);
 
-		// can create empty object
 		Board();
 };

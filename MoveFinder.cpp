@@ -36,7 +36,7 @@ vector<Move> pawn(Piece* piece, vector<vector<Square>>* board, Move lastMove) {
 	int thisY;
 
 	// color affects squares to be checked
-	if ((*piece).getColor() == 'B') {
+	if ((*piece).color == 'B') {
 		thisY = y + 1;
 
 		if (y == 1 && (*board)[y + 1][x].getPiece().empty && (*board)[y + 2][x].getPiece().empty) {
@@ -68,7 +68,7 @@ vector<Move> pawn(Piece* piece, vector<vector<Square>>* board, Move lastMove) {
 	if (inBound(thisY, x - 1)) {
 		(*board)[thisY][x - 1].pressure.push_back(piece);
 
-		if (inBound(thisY, x - 1) && !(*board)[thisY][x - 1].getPiece().empty && (*piece).getColor() != (*board)[thisY][x - 1].getPiece().getColor()) {
+		if (inBound(thisY, x - 1) && !(*board)[thisY][x - 1].getPiece().empty && (*piece).color != (*board)[thisY][x - 1].getPiece().color) {
 			if (thisY == 7 || thisY == 0) {
 				find_promotions(Move(piece, &(*board)[thisY][x - 1]), &moves);
 			}
@@ -81,7 +81,7 @@ vector<Move> pawn(Piece* piece, vector<vector<Square>>* board, Move lastMove) {
 	if (inBound(thisY, x + 1)) {
 		(*board)[thisY][x + 1].pressure.push_back(piece);
 
-		if (!(*board)[thisY][x + 1].getPiece().empty && (*piece).getColor() != (*board)[thisY][x + 1].getPiece().getColor()) {
+		if (!(*board)[thisY][x + 1].getPiece().empty && (*piece).color != (*board)[thisY][x + 1].getPiece().color) {
 			if (thisY == 7 || thisY == 0) {
 				find_promotions(Move(piece, &(*board)[thisY][x + 1]), &moves);
 			}
@@ -138,7 +138,7 @@ vector<Move> knight(Piece* piece, vector<vector<Square>>* board) {
 				(*board)[thisY][thisX].pressure.push_back(piece);
 
 				// free from same color pieces?
-				if ((*piece).getColor() != (*board)[thisY][thisX].getPiece().getColor()) {
+				if ((*piece).color != (*board)[thisY][thisX].getPiece().color) {
 					// adds move
 					moves.push_back(Move(piece, &(*board)[thisY][thisX]));
 				}
@@ -181,7 +181,7 @@ vector<Move> bishop(Piece* piece, vector<vector<Square>>* board) {
 				(*board)[thisY][thisX].pressure.push_back(piece);
 
 				// free from same color pieces?
-				if (hitPiece.getColor() != (*piece).getColor()) {
+				if (hitPiece.color != (*piece).color) {
 
 					// adds move
 					if (canMove) {
@@ -202,7 +202,7 @@ vector<Move> bishop(Piece* piece, vector<vector<Square>>* board) {
 					if (hitPiece.str != 'Q' && hitPiece.str != 'B') {
 
 						// special pressure case: pawn blocking bishop
-						if (hitPiece.str == 'P' && max(0, direction1) == ((*piece).getColor() == 'B') && inBound(thisY + k * direction1, thisX + k * direction2)) {
+						if (hitPiece.str == 'P' && max(0, direction1) == ((*piece).color == 'B') && inBound(thisY + k * direction1, thisX + k * direction2)) {
 							(*board)[thisY + k * direction1][thisX + k * direction2].pressure.push_back(piece);
 						}
 
@@ -254,7 +254,7 @@ vector<Move> rook(Piece* piece, vector<vector<Square>>* board) {
 				(*board)[thisY][thisX].pressure.push_back(piece);
 
 				// free from same color pieces?
-				if (hitPiece.getColor() != (*piece).getColor()) {
+				if (hitPiece.color != (*piece).color) {
 
 					// adds move
 					if (canMove) {
@@ -318,7 +318,7 @@ vector<Move> king(Piece* piece, vector<vector<Square>>* board, pair<bool, bool> 
 			(*board)[thisY][thisX].pressure.push_back(piece);
 
 			// square free from same color pieces? 
-			if ((*piece).getColor() != (*board)[thisY][thisX].getPiece().getColor()) {
+			if ((*piece).color != (*board)[thisY][thisX].getPiece().color) {
 				// adds a move to the list
 				moves.push_back(Move(piece, &(*board)[thisY][thisX]));
 			}

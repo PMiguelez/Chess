@@ -6,7 +6,7 @@
 
 using namespace std;
 
-// Game.h > Moves.h > Board.h > Pieces.h
+// Game > Moves > Board > Pieces
 
 int main()
 {
