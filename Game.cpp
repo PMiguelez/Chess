@@ -223,7 +223,7 @@ Game::Game(Game* parentGame, Move move) {
 	// update moves + pressure
 	for (int i = 0; i < board.pieces.size(); i++) {
 		if (!board.pieces[i].empty) {
-			moves.updatePiece(i, &board.board, Move(new Piece(), new Square()));
+			moves.updatePiece(i, &board.board, move);
 		}
 	}
 }
