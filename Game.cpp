@@ -139,7 +139,7 @@ bool Game::isLegal(Game newGame) {
 
 
 // game loop | new active position
-Game* Game::activate() {
+vector<Game*> Game::activate() {
 	// get all moves
 	vector<Move> allMoves = moves.get_moves(turn);
 
@@ -173,14 +173,7 @@ Game* Game::activate() {
 		exit(1000);
 	}
 
-	// choose next move
-	int nextGame = int(rand() % newGames.size());
-
-	// clean memory
-	newGames.erase(newGames.begin(), newGames.begin() + nextGame);
-	newGames.erase(newGames.begin() + 1, newGames.end());
-
-	return newGames[0];
+	return newGames;
 }
 
 

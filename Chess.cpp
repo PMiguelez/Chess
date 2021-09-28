@@ -2,7 +2,8 @@
 #include <vector>
 #include <algorithm>
 #include <time.h>
-#include "Game.h"
+
+#include "Eval.h"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ int main()
 	srand(time(0));
 
 	// initial board
-	vector<vector<pair<char,char>>> test = {
+	vector<vector<pair<char, char>>> test = {
 									{{'R','B'}, {'N','B'}, {'B','B'}, {'Q','B'}, {'K','B'}, {'B','B'}, {'N','B'}, {'R','B'}},
 									{{'P','B'}, {'P','B'}, {'P','B'}, {'P','B'}, {'P','B'}, {'P','B'}, {'P','B'}, {'P','B'}},
 									{{' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}},
@@ -35,9 +36,28 @@ int main()
 								{{' ',' '}, {' ',' '}, {' ',' '}, {' ',' '}, {'K','W'}, {' ',' '}, {' ',' '}, {' ',' '}} };
 
 
-	Game* game = Game(test).activate();
+	vector<Game*> games = Game(test).activate();
+	vector<pair<float, int>> evals = {};
 
 	while (true) {
-		game = (*game).activate();
+		// evaluate positions
+		evals.clear();
+		for (int i = 0; i < games.size(); i++) {
+			evals.push_back({eval(games[i]), i});
+		}
+		sort(evals.begin(), evals.end());
+
+		
+		int game = 0;
+		if ((*games[0]).turn == 'B') {
+			game = games.size() - 1;
+		}
+
+		// clean memory
+		games.erase(games.begin(), games.begin() + evals[game].second);
+		games.erase(games.begin() + 1, games.end());
+
+		// make move
+		games = (*games[0]).activate();
 	}
 }

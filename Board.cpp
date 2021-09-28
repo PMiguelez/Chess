@@ -32,6 +32,12 @@ void Board::resetPressure() {
 
 // delete piece forever
 void Board::deletePiece(int index) {
+	if (pieces[index].color == 'W') {
+		material_count -= pieces[index].value;
+	}
+	else {
+		material_count += pieces[index].value;
+	}
 	pieces[index] = Piece();
 }
 
@@ -87,6 +93,9 @@ Board::Board(vector<vector<pair<char, char>>> board_config) {
 					if (piece.str == 'K') {
 						white_king_index = pieces.size();
 					}
+					else {
+						material_count += piece.value;
+					}
 				}
 				else if (color == 'B') {
 					piece.colorIndex = blackPieces.size();
@@ -94,6 +103,9 @@ Board::Board(vector<vector<pair<char, char>>> board_config) {
 
 					if (piece.str == 'K') {
 						black_king_index = pieces.size();
+					}
+					else {
+						material_count -= piece.value;
 					}
 				}
 

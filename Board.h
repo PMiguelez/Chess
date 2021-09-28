@@ -38,6 +38,8 @@ class Board {
 		int white_king_index = 0;
 		int black_king_index = 0;
 
+		int material_count = 0;
+
 
 		// reset list of what pieces hit which squares
 		void resetPressure();

@@ -6,15 +6,15 @@ using namespace std;
 
 // game flow controller -> connects most classes
 class Game {
-	Board board;
-	Moves moves;
-
-	Move lastMove = Move(new Piece(), new Square());
-
-	char turn;
-	int turnCount;
-
 	public:
+		Board board;
+		Moves moves;
+
+		Move lastMove = Move(new Piece(), new Square());
+
+		char turn;
+		int turnCount;
+
 		void print();
 
 		void deletePiece(int index);
@@ -27,7 +27,7 @@ class Game {
 
 
 		// game loop | update active position
-		Game* activate();
+		vector<Game*> activate();
 
 
 		// help organize game transition
