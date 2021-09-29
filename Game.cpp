@@ -155,10 +155,6 @@ vector<Game*> Game::activate() {
 		}
 	}
 
-	// print game to console
-	cin.ignore();
-	print();
-
 	// out of moves? -> end
 	if (newGames.empty()) {
 		changeTurn();

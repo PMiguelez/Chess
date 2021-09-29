@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <time.h>
 
-#include "Eval.h"
+#include "Calculation.h"
 
 using namespace std;
 
@@ -43,7 +43,7 @@ int main()
 		// evaluate positions
 		evals.clear();
 		for (int i = 0; i < games.size(); i++) {
-			evals.push_back({eval(games[i]), i});
+			evals.push_back({calculate(games[i], 1), i});
 		}
 		sort(evals.begin(), evals.end());
 
@@ -56,6 +56,10 @@ int main()
 		// clean memory
 		games.erase(games.begin(), games.begin() + evals[game].second);
 		games.erase(games.begin() + 1, games.end());
+
+		// print game to console
+		cin.ignore();
+		(*games[0]).print();
 
 		// make move
 		games = (*games[0]).activate();
