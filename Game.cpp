@@ -155,20 +155,6 @@ vector<Game*> Game::activate() {
 		}
 	}
 
-	// out of moves? -> end
-	if (newGames.empty()) {
-		changeTurn();
-
-		// king (not) in check? -> Stalemate | Checkmate
-		if (isLegal(*this)) {
-			cout << "\n\n DRAW BY STALEMATE ";
-		}
-		else {
-			cout << "\n\n CHECKMATE " << turn << " WINS";
-		}
-		exit(1000);
-	}
-
 	return newGames;
 }
 

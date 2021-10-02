@@ -1,4 +1,9 @@
-﻿  Chess.cpp
+﻿  Calculation.cpp
+C:\000programacao\Chess\Chess\Calculation.cpp(34,31): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\000programacao\Chess\Chess\Calculation.cpp(51,36): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Chess.cpp
 C:\000programacao\Chess\Chess\Chess.cpp(15,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 C:\000programacao\Chess\Chess\Chess.cpp(53,27): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  Game.cpp
+  Generating Code...
   Chess.vcxproj -> C:\000programacao\Chess\Chess\x64\Debug\Chess.exe
